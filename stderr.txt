@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "C:\Users\SAMI\Desktop\saif\php compiler project\test.py", line 8, in <module>
+    input_data = sys.stdin.readline().strip()
+KeyboardInterrupt
+^C
