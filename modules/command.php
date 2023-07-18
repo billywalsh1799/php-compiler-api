@@ -3,7 +3,7 @@
 echo "command\n";
 function prepare_command($language,$file,...$args) {
     
-    $command;
+    $command="";
     $arguments=array();
     
     foreach ($args as $arg) {  
@@ -21,7 +21,7 @@ function prepare_command($language,$file,...$args) {
         $command="php $phpFile $argumentString";
     }
 
-    else if($language=="nodejs"){
+    else if($language=="node"){
         $nodeFile=$file;
         $command="node $nodeFile $argumentString";
     }
@@ -33,7 +33,7 @@ function prepare_command($language,$file,...$args) {
 
 $py_command=prepare_command("python","test2.py","al pacino","robert deniro","brad pitt");
 $php_command=prepare_command("php","test.php","al pacino","robert deniro","edward norton");
-$node_command=prepare_command("nodejs","test.js","francis ford copola","quenten tarentino");
+$node_command=prepare_command("node","test.js","francis ford copola","quenten tarentino");
 
 $py_output=shell_exec($py_command);
 $php_output=shell_exec($php_command);
