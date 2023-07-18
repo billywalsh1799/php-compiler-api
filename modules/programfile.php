@@ -1,6 +1,6 @@
 <?php
 
-echo "programfile";
+//echo "programfile";
 
 
 //returns path of program to compile
@@ -32,7 +32,7 @@ function program_file($language,$code){
     }
 
     else{
-        return "error";
+        throw new Exception("Unsopported language");
     }
 
 }

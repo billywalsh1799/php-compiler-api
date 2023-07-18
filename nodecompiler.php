@@ -13,7 +13,8 @@ $arguments = array('"' . $arg1 . '"', '"' . $arg2 . '"', '"' . $arg3 . '"');
 $argumentString = implode(' ', $arguments);
 
 //Pepare command to execute script with arguments
-$executeCmd = "node $nodeFile " .implode(' ', $arguments);
+//$executeCmd = "node $nodeFile " .implode(' ', $arguments);
+$executeCmd = "node $nodeFile $argumentString";
 
 // Concatenate the arguments with a delimiter
 //$inputData = $arg1 . "|" . $arg2 . "|" . $arg3;
