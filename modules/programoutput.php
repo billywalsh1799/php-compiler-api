@@ -1,6 +1,6 @@
 <?php
 
-echo "compiler\n";
+//echo "compiler\n";
 //timelimit for python and php 10sec 2 for other languages
 function program_output($command){
    
@@ -50,7 +50,7 @@ function program_output($command){
             $executeExitCode = proc_close($executeProcess);
             
             if ($executeExitCode !== 0) {
-                throw new Exception("RunTime Error");
+                throw new Exception("RunTime Error:$error");
                 //send RuntimeError
             }
 
@@ -80,7 +80,7 @@ function program_output($command){
 
 }
 
-try{
+/* try{
     $result=program_output("node test.js");
     echo "output:$result";
 }
@@ -88,6 +88,6 @@ catch(Exception $e){
     $message =  $e->getMessage();
     echo"error:$message\n";
 }
-echo "test line";
+echo "test line"; */
 
 ?>
