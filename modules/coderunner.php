@@ -1,13 +1,16 @@
 <?php
 
 require "programfile.php";
+require "command.php";
 
 echo "coderunner\n";
 
 function code_evaluation($language,$code){
     try {
-        $output=program_file($language,$code);
-        echo "output:$output";
+        $file=program_file($language,$code);
+        echo "filepath:$file\n";
+        $command=prepare_command($language,$file,"al pacino","robert deniro");
+        echo "command:$command\n";
     } catch (Exception $e) {
         $message =  $e->getMessage();
         echo"error:$message";
