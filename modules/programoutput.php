@@ -1,10 +1,9 @@
 <?php
 
-echo "compiler";
+echo "compiler\n";
 //timelimit for python and php 10sec 2 for other languages
 function program_output($command){
    
-    
     //Pepare command to execute script with arguments
     $executeCmd =$command;
     //Prepare pipes
@@ -18,7 +17,6 @@ function program_output($command){
     if (is_resource($executeProcess) && is_array($executePipes) && is_resource($executePipes[1])) {
         // Set the maximum execution time  for the process
         $maxExecutionTime =2;
-        
         //variable to test whether program exceeded timelimit
         $timeLimit=0;
         // Start the timer
@@ -32,46 +30,64 @@ function program_output($command){
                 // Additional handling for the termination
                 // ...
                 $timeLimit=1;
-                echo "time limit exceeded\n";
+                //echo "time limit exceeded\n";
                 //send TimeLimit
+                //throw new Exception("TimeLimit Exceeded"); throw it in condition
             }
         }
         
-        //if time limit exceeded do not get stream contents
-
         if($timeLimit==0){
             //program executed whithin timelimit
             // Read and display the program's output
             $output= stream_get_contents($executePipes[1]);  // stdout
             $error= stream_get_contents($executePipes[2]);  // stderr
 
-            echo "stdout:$output";  // stdout
-            echo "stderr:$error\n";  // stderr
-        }
+            fclose($executePipes[1]);  // Close stdout
+            fclose($executePipes[2]);  // Close stderr
 
-        fclose($executePipes[1]);  // Close stdout
-        fclose($executePipes[2]);  // Close stderr
 
-        // Wait for the execution process to finish
-        $executeExitCode = proc_close($executeProcess);
+            //close process and get execution exit code
+            $executeExitCode = proc_close($executeProcess);
+            
+            if ($executeExitCode !== 0) {
+                throw new Exception("RunTime Error");
+                //send RuntimeError
+            }
 
-        echo "execution code:$executeExitCode\n";
+            else{
+                //echo "python script execution succeeded with exit code: $executeExitCode\n";
+                //return output
+                return $output;
+            }
 
-        if ($executeExitCode !== 0) {
-            echo "Python script execution failed with exit code: $executeExitCode\n";
-            //send RuntimeError
         }
 
         else{
-            echo "python script execution succeeded with exit code: $executeExitCode\n";
-            //return output
+            //program exceeded timelimit
+            //close pipes
+            fclose($executePipes[1]);  // Close stdout
+            fclose($executePipes[2]);  // Close stderr
+            proc_close($executeProcess);//ensure process is closed
+            throw new Exception("TimeLimit Exceeded");
         }
+
     } 
 
     else {
-        echo "Failed to execute Python script.";
-    }
+        throw new Exception("Failed to execute Python script");
     }
 
+
+}
+
+try{
+    $result=program_output("node test.js");
+    echo "output:$result";
+}
+catch(Exception $e){
+    $message =  $e->getMessage();
+    echo"error:$message\n";
+}
+echo "test line";
 
 ?>

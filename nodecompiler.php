@@ -1,7 +1,7 @@
 <?php
 
-echo "python compiler\n";
-$nodeFile ="test.js";  // Replace with the actual path to your Python file
+echo "node compiler\n";
+$nodeFile ="test.js";  // Replace with the actual path to your node file
 // Multiple arguments to be passed
 $arg1 = "al pacino";
 $arg2 = "robert deniro";
@@ -29,12 +29,12 @@ $executeProcess = proc_open($executeCmd, $executeDescriptorSpec, $executePipes);
 
 if (is_resource($executeProcess) && is_array($executePipes) && is_resource($executePipes[1])) {
     
-    // Pass input data to the Python script
+    // Pass input data to the node script
     //fwrite($executePipes[0], $inputData);
     //fclose($executePipes[0]);  // Close stdin
     
     // Set the maximum execution time  for the process
-    $maxExecutionTime =2;
+    $maxExecutionTime =5;
     // Sleep for the desired duration
     //sleep($maxExecutionTime);
     $status = proc_get_status($executeProcess);
@@ -47,11 +47,12 @@ if (is_resource($executeProcess) && is_array($executePipes) && is_resource($exec
         $elapsedTime = time() - $startTime;
         if ($elapsedTime >= $maxExecutionTime){
             // Process is still running, terminate it
-            proc_terminate($executeProcess);
+            $terminate_code=proc_terminate($executeProcess);
             // Additional handling for the termination
             // ...
             $timeLimit=1;
             echo "time limit exceeded\n";
+            echo "terminate code:$terminate_code";
             //send TimeLimit
 
         }
@@ -65,7 +66,7 @@ if (is_resource($executeProcess) && is_array($executePipes) && is_resource($exec
         $output= stream_get_contents($executePipes[1]);  // stdout
         $error= stream_get_contents($executePipes[2]);  // stderr
 
-        echo "stdout:$output";  // stdout
+        echo "stdout:$output\n";  // stdout
         echo "stderr:$error\n";  // stderr
     }
 
@@ -78,16 +79,16 @@ if (is_resource($executeProcess) && is_array($executePipes) && is_resource($exec
     echo "execution code:$executeExitCode\n";
 
     if ($executeExitCode !== 0) {
-        echo "Python script execution failed with exit code: $executeExitCode\n";
+        echo "node script execution failed with exit code: $executeExitCode\n";
         //send RuntimeError
     }
 
     else{
-        echo "python script execution succeeded with exit code: $executeExitCode\n";
+        echo "node script execution succeeded with exit code: $executeExitCode\n";
     }
 } 
 
 else {
-    echo "Failed to execute Python script.";
+    echo "Failed to execute node script.";
 }
 ?>
